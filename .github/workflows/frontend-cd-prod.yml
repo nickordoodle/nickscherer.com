@@ -1,3 +1,4 @@
+# Deploys the static export to S3 + CloudFront on push to prod.
 name: Frontend CD — Production
 
 on:
