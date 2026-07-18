@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d9ff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#9333ea" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d9ff"/>
+      <stop offset="100%" stop-color="#9333ea"/>
+    </linearGradient>
+    <clipPath id="circle">
+      <circle cx="100" cy="100" r="100"/>
+    </clipPath>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <!-- Body silhouette -->
+  <ellipse cx="100" cy="155" rx="52" ry="30" fill="url(#accent)" opacity="0.3"/>
+  <!-- Head -->
+  <circle cx="100" cy="82" r="34" fill="url(#accent)" opacity="0.4"/>
+  <!-- Initials -->
+  <text x="100" y="92" text-anchor="middle" dominant-baseline="middle" font-family="Inter, sans-serif" font-size="26" font-weight="800" fill="url(#accent)" opacity="0.9">NS</text>
+</svg>

@@ -1,0 +1,77 @@
+# ─── Dependencies ───
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# ─── Next.js / build output ───
+.next/
+out/
+build/
+dist/
+.turbo/
+
+# ─── TypeScript ───
+*.tsbuildinfo
+# NOTE: next-env.d.ts is intentionally tracked (Next.js convention) — CI typecheck
+# needs it on a fresh checkout
+
+# ─── Testing / coverage ───
+coverage/
+
+# ─── Environment / secrets ───
+.env
+.env.*
+!.env.example
+*.pem
+
+# ─── Terraform ───
+# Local provider plugins & modules (re-fetched via `terraform init`)
+**/.terraform/
+# State files may contain secrets — never commit; use a remote backend
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+# Saved plans and crash logs
+*.tfplan
+crash.log
+crash.*.log
+# Local CLI config overrides
+.terraformrc
+terraform.rc
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# NOTE: .terraform.lock.hcl and *.tfvars (e.g. envs/prod.tfvars) are intentionally tracked
+
+# ─── Logs ───
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ─── Editor / OS ───
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+*.swp
+.idea/
+
+# ─── Deploy ───
+.vercel
+
+# AI/IDE tooling (local)
+.claude/*
+!.claude/settings.json
+!.claude/skills
+.cursor/
+.mcp.json

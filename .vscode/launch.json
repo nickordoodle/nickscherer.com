@@ -1,0 +1,52 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: dev server",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/applications/frontend/node_modules/next/dist/bin/next",
+      "args": ["dev"],
+      "cwd": "${workspaceFolder}/applications/frontend",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal",
+      "serverReadyAction": {
+        "pattern": "Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      }
+    },
+    {
+      "name": "Next.js: dev server (debug)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/applications/frontend/node_modules/next/dist/bin/next",
+      "args": ["dev"],
+      "cwd": "${workspaceFolder}/applications/frontend",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "serverReadyAction": {
+        "pattern": "Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      }
+    },
+    {
+      "name": "Next.js: build",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/applications/frontend/node_modules/next/dist/bin/next",
+      "args": ["build"],
+      "cwd": "${workspaceFolder}/applications/frontend",
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "console": "integratedTerminal"
+    }
+  ]
+}
