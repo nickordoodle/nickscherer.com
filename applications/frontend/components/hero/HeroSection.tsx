@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowDown, ExternalLink, FileText, Download } from 'lucide-react';
+import { ArrowDown, FileText, Download } from 'lucide-react';
 import ParticleCanvas from './ParticleCanvas';
 import { useTheme } from '@/app/providers';
 
@@ -134,19 +134,6 @@ export default function HeroSection() {
           >
             Let&apos;s Connect
           </button>
-          <a
-            href="https://avi.ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-5 sm:px-8 py-3 rounded-full text-sm font-semibold border transition-all duration-300 hover:scale-105 inline-flex items-center gap-2"
-            style={{
-              borderColor: 'hsl(var(--border))',
-              color: 'hsl(var(--muted))',
-              background: 'hsl(var(--surface))',
-            }}
-          >
-            Avi AI <ExternalLink size={14} />
-          </a>
           <a
             href="/resume.pdf"
             target="_blank"

@@ -10,7 +10,6 @@ import ProjectsSection from '@/components/projects/ProjectsSection';
 import EducationSection from '@/components/education/EducationSection';
 import PublicationsSection from '@/components/publications/PublicationsSection';
 import ContactSection from '@/components/contact/ContactSection';
-import MediaSection from '@/components/media/MediaSection';
 import WritingSection from '@/components/writing/WritingSection';
 import CursorSpotlight from '@/components/ui/CursorSpotlight';
 
@@ -28,7 +27,6 @@ export default function Home() {
       <EducationSection />
       <PublicationsSection />
       <WritingSection />
-      <MediaSection />
       <ContactSection />
     </main>
   );
