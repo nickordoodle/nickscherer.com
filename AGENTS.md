@@ -4,11 +4,11 @@ Entrypoint for autonomous agents and AI contributors working on this repo.
 
 ## What this is
 
-Nick Scherer's personal / professional resume site (nickscherer.com): a single-page Next.js 14 static export in a Lerna + pnpm monorepo, deployed to S3 + CloudFront via Terraform. Architecturally identical to nickordoodle.com (the client-facing creative portfolio) — see [ADR-0001](docs/adr/0001-scaffold-from-nickordoodle.md) for the scaffold decision and [ARCHITECTURE.md](ARCHITECTURE.md) for the full map.
+Nick Scherer's personal / professional resume site (nickscherer.com): a single-page Next.js 14 static export, single pnpm package (no monorepo tooling), deployed to S3 + CloudFront via Terraform. Shares its design system and stack with nickordoodle.com (the client-facing creative portfolio) — see [ADR-0001](docs/adr/0001-scaffold-from-nickordoodle.md) and [ADR-0002](docs/adr/0002-flatten-to-single-package.md) for how this repo came to be, and [ARCHITECTURE.md](ARCHITECTURE.md) for the full map.
 
 ## Layout
 
-- `applications/frontend/` — the only application (`@nickscherer/frontend`). App Router lives in `app/`, section components in `components/<section>/`, content data in `lib/data.ts`.
+- `app/` — App Router. `components/<section>/` — section components. `lib/data.ts` — all content.
 - `infrastructure/terraform/` — AWS IaC (S3, CloudFront, ACM, Route53). See [OPERATIONS.md](OPERATIONS.md).
 - `docs/adr/` — decision records. `ROADMAP.md` — the work queue.
 
@@ -17,23 +17,23 @@ Nick Scherer's personal / professional resume site (nickscherer.com): a single-p
 All verified against `package.json` scripts. Node 20+, pnpm 9.
 
 ```bash
-pnpm install              # workspace install (root)
-pnpm dev:frontend         # next dev via lerna
-pnpm build:frontend       # fetch-medium.mjs + next build → applications/frontend/out/
-pnpm lint                 # lerna run lint → next lint
-pnpm typecheck            # lerna run typecheck → tsc --noEmit
+pnpm install     # install
+pnpm dev         # next dev
+pnpm build       # fetch-medium.mjs + next build → out/
+pnpm lint        # next lint
+pnpm typecheck   # tsc --noEmit
 ```
 
-Inside `applications/frontend/`: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`. There is no test script yet (see ROADMAP). CI (`.github/workflows/frontend-ci.yml`) runs lint, typecheck, and build on push/PR to `dev` and `prod`. Note `pnpm build` requires network access to fetch the Medium RSS feed — on failure it writes an empty `lib/medium-posts.json` rather than failing the build.
+There is no test script yet (see ROADMAP). CI (`.github/workflows/frontend-ci.yml`) runs lint, typecheck, and build on push/PR to `dev` and `prod`. Note `pnpm build` requires network access to fetch the Medium RSS feed — on failure it writes an empty `lib/medium-posts.json` rather than failing the build.
 
 ## Code conventions (observed)
 
-- **One folder per page section** under `components/` (`hero/`, `about/`, `work/`, `skills/`, `projects/`, `education/`, `publications/`, `writing/`, `media/`, `contact/`, `nav/`), shared primitives in `components/ui/` (`TiltCard`, `ScrollReveal`, `CursorSpotlight`, `ThemeToggle`).
+- **One folder per page section** under `components/` (`hero/`, `about/`, `work/`, `skills/`, `projects/`, `education/`, `publications/`, `writing/`, `contact/`, `nav/`), shared primitives in `components/ui/` (`TiltCard`, `ScrollReveal`, `CursorSpotlight`, `ThemeToggle`).
 - Components are PascalCase `.tsx` files with a single default export; nearly everything is `'use client'` (the whole page is client-rendered, then statically exported).
 - **All resume content lives in `lib/data.ts`** as typed arrays (`Role`, `Project`, `Education`, `Publication`, …). Components import from there — don't hardcode content in components.
 - Styling: Tailwind utilities plus CSS-variable tokens (`hsl(var(--background))`, `var(--accent-cyan)`) defined in `app/globals.css` and mapped in `tailwind.config.js`. Dark mode is class-based, toggled through the theme context in `app/providers.tsx`. Use the `cn()` helper (`lib/utils.ts`, clsx + tailwind-merge) for conditional classes.
 - Icons: lucide-react. Animation: framer-motion (`HeroSection`, `ImpactMetrics`, `ScrollReveal`) and ECharts via `echarts-for-react` (`SkillsRadar`, `CareerTimelineChart`, `TechBubbles`).
-- Path alias `@/*` resolves to the frontend package root.
+- Path alias `@/*` resolves to the repo root.
 
 ## Process conventions
 

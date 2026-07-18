@@ -6,7 +6,17 @@ on:
     branches:
       - prod
     paths:
-      - 'applications/frontend/**'
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'public/**'
+      - 'scripts/**'
+      - 'next.config.js'
+      - 'tailwind.config.js'
+      - 'postcss.config.js'
+      - 'tsconfig.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
       - '.github/workflows/frontend-cd-prod.yml'
 
 jobs:
@@ -33,7 +43,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build frontend
-        run: pnpm build:frontend
+        run: pnpm build
         env:
           NODE_ENV: production
 
@@ -46,14 +56,14 @@ jobs:
 
       - name: Sync to S3
         run: |
-          aws s3 sync applications/frontend/out/ s3://${{ secrets.S3_BUCKET_NAME }}/ \
+          aws s3 sync out/ s3://${{ secrets.S3_BUCKET_NAME }}/ \
             --delete \
             --cache-control "public, max-age=31536000, immutable" \
             --exclude "*.html" \
             --exclude "*.json"
 
           # HTML and JSON with shorter cache
-          aws s3 sync applications/frontend/out/ s3://${{ secrets.S3_BUCKET_NAME }}/ \
+          aws s3 sync out/ s3://${{ secrets.S3_BUCKET_NAME }}/ \
             --delete \
             --cache-control "public, max-age=0, must-revalidate" \
             --include "*.html" \

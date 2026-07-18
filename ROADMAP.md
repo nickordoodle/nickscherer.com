@@ -9,7 +9,7 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 | Date | Item | What's needed |
 |---|---|---|
 | 2026-07-18 | Infra bootstrap (see [OPERATIONS.md](OPERATIONS.md) prerequisites): the site cannot deploy until done | Owner creates state bucket `nickscherer-terraform-state`, ensures the `nickscherer.com` Route53 hosted zone exists with registrar NS delegation, runs `terraform apply -var-file=envs/prod.tfvars`, then sets repo secrets `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `S3_BUCKET_NAME`, `CLOUDFRONT_DISTRIBUTION_ID` |
-| 2026-07-18 | Hero CTAs link to `/resume.pdf` but `public/` contains no such file — the View/Download Resume buttons 404 on the live site | Owner provides a resume PDF to place at `applications/frontend/public/resume.pdf` (or decides to remove the CTAs) |
+| 2026-07-18 | Hero CTAs link to `/resume.pdf` but `public/` contains no such file — the View/Download Resume buttons 404 on the live site | Owner provides a resume PDF to place at `public/resume.pdf` (or decides to remove the CTAs) |
 
 ## Status Grid
 
@@ -27,6 +27,7 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 | 8 | [Harden the Medium feed build step](#harden-the-medium-feed-build-step) | Low | 🔴 Not started |
 | 9 | [Upgrade Next.js to 15/16 (major)](#upgrade-nextjs-to-1516-major) | Medium | 🔴 Not started |
 | 10 | [Manage drift against nickordoodle.com](#manage-drift-against-nickordoodlecom) | Low | 🔴 Ongoing concern |
+| 11 | [Flatten repo to a single package](#flatten-repo-to-a-single-package) | High | ✅ Done 2026-07-18 ([ADR-0002](docs/adr/0002-flatten-to-single-package.md)) |
 
 ## High priority
 
@@ -106,8 +107,15 @@ Plan: on failure, keep the existing committed JSON instead of clobbering it; log
 
 Status: Ongoing concern
 
-The two repos share ~95% of their code by design ([ADR-0001](docs/adr/0001-scaffold-from-nickordoodle.md)) but have no shared-package mechanism — fixes land twice or not at all. Acceptable at this scale; revisit (shared component package, or scripted diff check) if the divergence starts causing real bugs. When picking up an inherited roadmap item here, check whether the same fix should be mirrored in nickordoodle.com and vice versa.
+The two repos share their design system and most component/content code by design ([ADR-0001](docs/adr/0001-scaffold-from-nickordoodle.md)) but have no shared-package mechanism — fixes land twice or not at all. This repo's package layout also now differs from nickordoodle.com's (single package here vs. Lerna/pnpm monorepo there, per [ADR-0002](docs/adr/0002-flatten-to-single-package.md)), so component code isn't even copy-paste compatible without adjusting import paths. Acceptable at this scale; revisit (shared component package, or scripted diff check) if the divergence starts causing real bugs. When picking up an inherited roadmap item here, check whether the same fix should be mirrored in nickordoodle.com and vice versa.
+
+### Flatten repo to a single package
+
+Status: ✅ Done 2026-07-18 ([ADR-0002](docs/adr/0002-flatten-to-single-package.md))
+
+The initial scaffold ([ADR-0001](docs/adr/0001-scaffold-from-nickordoodle.md)) copied nickordoodle.com's Lerna + pnpm workspace shape (`applications/frontend/`) verbatim, but this repo only ever holds one app — the monorepo layer added indirection with no payoff. Moved all frontend source to the repo root, removed Lerna/pnpm-workspace, merged the two `package.json`s into one, and updated CI/CD paths, `.vscode/launch.json`, and docs accordingly.
 
 ## Review History
 
+- **2026-07-18** — Repo flattened from a Lerna/pnpm monorepo to a single package ([ADR-0002](docs/adr/0002-flatten-to-single-package.md)): `applications/frontend/*` moved to repo root, Lerna/workspace config removed, CI/CD and tooling paths updated.
 - **2026-07-18** — Repo scaffolded from nickordoodle.com ([ADR-0001](docs/adr/0001-scaffold-from-nickordoodle.md)). Roadmap seeded: infra bootstrap awaiting owner, plus the gaps inherited from the source repo (SEO, echarts bundle, placeholder assets, a11y, tests, Medium hardening, Next major) and a standing drift-management note.

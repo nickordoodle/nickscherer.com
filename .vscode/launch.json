@@ -5,9 +5,9 @@
       "name": "Next.js: dev server",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/applications/frontend/node_modules/next/dist/bin/next",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
       "args": ["dev"],
-      "cwd": "${workspaceFolder}/applications/frontend",
+      "cwd": "${workspaceFolder}",
       "env": {
         "NODE_ENV": "development"
       },
@@ -22,9 +22,9 @@
       "name": "Next.js: dev server (debug)",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/applications/frontend/node_modules/next/dist/bin/next",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
       "args": ["dev"],
-      "cwd": "${workspaceFolder}/applications/frontend",
+      "cwd": "${workspaceFolder}",
       "env": {
         "NODE_ENV": "development"
       },
@@ -40,9 +40,9 @@
       "name": "Next.js: build",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/applications/frontend/node_modules/next/dist/bin/next",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
       "args": ["build"],
-      "cwd": "${workspaceFolder}/applications/frontend",
+      "cwd": "${workspaceFolder}",
       "env": {
         "NODE_ENV": "production"
       },

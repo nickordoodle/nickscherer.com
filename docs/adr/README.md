@@ -16,3 +16,4 @@ Decision records for nickscherer.com. Work items originate in [ROADMAP.md](../..
 | ADR | Title | Status | Created |
 |---|---|---|---|
 | [0001](0001-scaffold-from-nickordoodle.md) | Scaffold nickscherer.com from nickordoodle.com | ✅ Done | 2026-07-18 |
+| [0002](0002-flatten-to-single-package.md) | Flatten repo to a single package | ✅ Done | 2026-07-18 |

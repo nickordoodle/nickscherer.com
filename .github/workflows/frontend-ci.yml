@@ -40,4 +40,4 @@ jobs:
         run: pnpm typecheck
 
       - name: Build
-        run: pnpm build:frontend
+        run: pnpm build

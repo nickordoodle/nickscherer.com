@@ -25,13 +25,14 @@ pushing it triggers the CD workflow below).
 
 ## CD — `frontend-cd-prod.yml`
 
-Trigger: **push to `prod`** (paths: `applications/frontend/**` or the workflow
-file). Steps: pnpm 9 + Node 20 → `pnpm install --frozen-lockfile` →
-`pnpm build:frontend` (NODE_ENV=production) → `aws s3 sync
-applications/frontend/out/` to the bucket in repo secret `S3_BUCKET_NAME`
-(immutable long-cache for assets, `max-age=0` for HTML/JSON, `--delete`) →
-CloudFront invalidation `/*` on `CLOUDFRONT_DISTRIBUTION_ID`. AWS auth via repo
-secrets `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY`, region us-east-1.
+Trigger: **push to `prod`** (paths: `app/**`, `components/**`, `lib/**`,
+`public/**`, `scripts/**`, top-level config files, or the workflow file).
+Steps: pnpm 9 + Node 20 → `pnpm install --frozen-lockfile` → `pnpm build`
+(NODE_ENV=production) → `aws s3 sync out/` to the bucket in repo secret
+`S3_BUCKET_NAME` (immutable long-cache for assets, `max-age=0` for HTML/JSON,
+`--delete`) → CloudFront invalidation `/*` on `CLOUDFRONT_DISTRIBUTION_ID`. AWS
+auth via repo secrets `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY`, region
+us-east-1.
 
 **CD will fail until all four secrets exist** (see bootstrap below).
 

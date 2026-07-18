@@ -2,7 +2,7 @@
 
 Current-state map of nickscherer.com. **This is living documentation** — update it whenever routes, components, or infrastructure change.
 
-Architecturally identical to nickordoodle.com, from which this repo was scaffolded ([ADR-0001](docs/adr/0001-scaffold-from-nickordoodle.md)); the deltas are content framing (resume vs. client portfolio), the dropped Services section, and the domain/state-bucket names.
+Shares its design system and stack with nickordoodle.com, from which this repo was originally scaffolded ([ADR-0001](docs/adr/0001-scaffold-from-nickordoodle.md)) and then flattened from a Lerna/pnpm monorepo into a single-package repo ([ADR-0002](docs/adr/0002-flatten-to-single-package.md)). Content deltas from nickordoodle.com: resume framing instead of client pitch, and the Services and Media/Creative sections dropped.
 
 ## Routes
 
@@ -10,14 +10,14 @@ Single-route site (Next.js 14 App Router, static export):
 
 | Route | Source | Notes |
 |---|---|---|
-| `/` | `applications/frontend/app/page.tsx` | The entire resume; a client component stacking all sections with in-page anchors (`#writing`, `#contact`, …) |
+| `/` | `app/page.tsx` | The entire resume; a client component stacking all sections with in-page anchors (`#writing`, `#contact`, …) |
 | 404 | Next default `_not-found` | No custom not-found page; CloudFront rewrites 404/403 → `/index.html` anyway |
 
 `app/layout.tsx` holds all SEO metadata (title, description, OpenGraph, Twitter card) and loads Inter + JetBrains Mono from Google Fonts via `<link>`. `app/providers.tsx` provides a dark/light theme context persisted to `localStorage` (class-based, default dark).
 
 ## Components
 
-One folder per section under `applications/frontend/components/`:
+One folder per section under `components/`:
 
 | Section | Components | Notes |
 |---|---|---|
@@ -28,7 +28,6 @@ One folder per section under `applications/frontend/components/`:
 | skills | `SkillsSection`, `SkillsRadar`, `CareerTimelineChart`, `TechBubbles`, `ImpactMetrics` | The three chart components use **echarts** via `echarts-for-react` (statically imported); `ImpactMetrics` uses framer-motion |
 | projects / education / publications | one `*Section` each | Content from `lib/data.ts` |
 | writing | `WritingSection` | Renders `lib/medium-posts.json`, generated at build by `scripts/fetch-medium.mjs` from the nickordoodle.medium.com RSS feed (same author, shared feed) |
-| media | `MediaSection` | Filterable gallery — currently **placeholder items only**, no real assets |
 | contact | `ContactSection` | LinkedIn / GitHub / avi.ai links; avatar is `public/images/avatar-placeholder.svg` |
 | ui | `TiltCard`, `ScrollReveal`, `CursorSpotlight`, `ThemeToggle` | Shared primitives; `ScrollReveal` wraps framer-motion viewport reveals |
 
@@ -36,7 +35,7 @@ Library usage in short: **framer-motion** in `HeroSection`, `ImpactMetrics`, `Sc
 
 ## Build output
 
-`next.config.js` sets `output: 'export'`, `distDir: 'out'`, `images.unoptimized: true`. `pnpm build:frontend` runs `scripts/fetch-medium.mjs` (writes `lib/medium-posts.json`; writes `[]` on fetch failure) then `next build`, producing a fully static site in `applications/frontend/out/`. There is no server runtime.
+`next.config.js` sets `output: 'export'`, `distDir: 'out'`, `images.unoptimized: true`. `pnpm build` runs `scripts/fetch-medium.mjs` (writes `lib/medium-posts.json`; writes `[]` on fetch failure) then `next build`, producing a fully static site in `out/`. There is no server runtime.
 
 ## Infrastructure (`infrastructure/terraform/`)
 
@@ -58,9 +57,9 @@ Root outputs: `frontend_bucket`, `cloudfront_distribution_id` (for cache invalid
 
 ```mermaid
 flowchart LR
-  Dev[Developer / agent] -->|pnpm build:frontend| Fetch[fetch-medium.mjs<br/>Medium RSS → medium-posts.json]
+  Dev[Developer / agent] -->|pnpm build| Fetch[fetch-medium.mjs<br/>Medium RSS → medium-posts.json]
   Fetch --> Build[next build<br/>static export]
-  Build --> Out[applications/frontend/out/]
+  Build --> Out[out/]
   Out -->|push prod → GitHub Actions CD| S3[(S3 frontend bucket<br/>private, OAC)]
   TF[Terraform<br/>infrastructure/terraform] -->|provisions| S3
   TF -->|provisions| CF[CloudFront<br/>url-rewrite fn, ACM cert]
