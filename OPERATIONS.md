@@ -13,15 +13,18 @@ pushing it triggers the CD workflow below).
    into `dev` when ready.
 2. **Push `dev`** — publishes code for visibility and backup only; nothing
    deploys from `dev`.
-3. **Deploy to prod (owner-performed):**
+3. **Deploy to prod (owner action):** open a PR from `dev` into `prod` and merge
+   it with a merge commit — the merge is the push that starts CD (frontend CD →
+   S3 + CloudFront).
    ```bash
-   git checkout prod
-   git rebase dev
-   git push origin prod        # triggers frontend CD → S3 + CloudFront
-   git checkout dev            # always return to dev afterward
+   gh pr create -B prod -H dev -t "Promote dev → prod" -b "<what ships>"
+   gh pr merge <n> --merge --match-head-commit <reviewed-sha>
    ```
-4. Routines/agents never push `prod` — deploying is always an explicit owner
-   action.
+   Never squash or rebase a promote PR (that forks `prod` from `dev`).
+   `--match-head-commit` refuses the merge if a routine merged more into `dev`
+   after you reviewed.
+4. Agents open or merge a promote PR only when the owner asks in that session;
+   routines never do.
 
 ## CD — `frontend-cd-prod.yml`
 
