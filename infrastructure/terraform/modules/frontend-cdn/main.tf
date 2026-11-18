@@ -74,10 +74,10 @@ resource "aws_s3_bucket_policy" "frontend" {
 # ─── ACM Certificate (must be in us-east-1) ──────────────────────────────────
 
 resource "aws_acm_certificate" "frontend" {
-  provider          = aws.us_east_1
-  domain_name       = var.domain
+  provider                  = aws.us_east_1
+  domain_name               = var.domain
   subject_alternative_names = ["www.${var.domain}"]
-  validation_method = "DNS"
+  validation_method         = "DNS"
 
   lifecycle {
     create_before_destroy = true
@@ -108,25 +108,26 @@ resource "aws_acm_certificate_validation" "frontend" {
   validation_record_fqdns = [for r in aws_route53_record.cert_validation : r.fqdn]
 }
 
-# ─── CloudFront Function (SPA URL rewriting) ─────────────────────────────────
+# ─── CloudFront Functions ─────────────────────────────────────────────────────
+# Code lives in functions/*.js (unit tests: functions/functions.test.js).
+# ADR-0003: Markdown negotiation for agents + real 404s.
 
+# viewer-request: static-export URL rewrite, plus Accept: text/markdown →
+# Markdown twin (/index.md) or a generated Markdown 404.
 resource "aws_cloudfront_function" "url_rewrite" {
   name    = "nickscherer-url-rewrite-${var.env}"
-  runtime = "cloudfront-js-1.0"
+  runtime = "cloudfront-js-2.0"
   publish = true
+  code    = file("${path.module}/functions/viewer-request.js")
+}
 
-  code = <<-EOF
-    function handler(event) {
-      var request = event.request;
-      var uri = request.uri;
-      if (uri.endsWith('/')) {
-        request.uri += 'index.html';
-      } else if (!uri.includes('.')) {
-        request.uri += '.html';
-      }
-      return request;
-    }
-  EOF
+# viewer-response: Vary: Accept, and text/markdown / text/plain charset
+# content-types for .md / .txt objects.
+resource "aws_cloudfront_function" "viewer_response" {
+  name    = "nickscherer-viewer-response-${var.env}"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  code    = file("${path.module}/functions/viewer-response.js")
 }
 
 # ─── CloudFront Distribution ─────────────────────────────────────────────────
@@ -158,19 +159,27 @@ resource "aws_cloudfront_distribution" "frontend" {
       event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.url_rewrite.arn
     }
+
+    function_association {
+      event_type   = "viewer-response"
+      function_arn = aws_cloudfront_function.viewer_response.arn
+    }
   }
 
+  # Unknown paths get a real 404 with the static export's /404.html (ADR-0003;
+  # was 200 + /index.html, a soft 404). S3 answers a missing key with 403
+  # (OAC, no ListBucket), so map both.
   custom_error_response {
     error_code            = 404
-    response_code         = 200
-    response_page_path    = "/index.html"
+    response_code         = 404
+    response_page_path    = "/404.html"
     error_caching_min_ttl = 10
   }
 
   custom_error_response {
     error_code            = 403
-    response_code         = 200
-    response_page_path    = "/index.html"
+    response_code         = 404
+    response_page_path    = "/404.html"
     error_caching_min_ttl = 10
   }
 
