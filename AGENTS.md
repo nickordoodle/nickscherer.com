@@ -22,9 +22,10 @@ pnpm dev         # next dev
 pnpm build       # fetch-medium.mjs + next build → out/
 pnpm lint        # next lint
 pnpm typecheck   # tsc --noEmit
+pnpm test:edge   # node --test for the CloudFront Functions (ADR-0003)
 ```
 
-There is no test script yet (see ROADMAP). CI (`.github/workflows/frontend-ci.yml`) runs lint, typecheck, and build on push/PR to `dev` and `prod`. Note `pnpm build` requires network access to fetch the Medium RSS feed — on failure it writes an empty `lib/medium-posts.json` rather than failing the build.
+There is no frontend test suite yet (see ROADMAP); `pnpm test:edge` covers the CloudFront Functions in `infrastructure/terraform/modules/frontend-cdn/functions/`. CI (`.github/workflows/frontend-ci.yml`) runs lint, typecheck, build and `test:edge` on push/PR to `dev` and `prod`. Agent-facing text (`llms.txt`, `index.md`, …) is generated from `lib/data.ts` by `lib/agent-content.ts`; About/contact prose that lives in components is mirrored there — keep both in sync. Note `pnpm build` requires network access to fetch the Medium RSS feed — on failure it writes an empty `lib/medium-posts.json` rather than failing the build.
 
 ## Code conventions (observed)
 
@@ -40,10 +41,19 @@ There is no test script yet (see ROADMAP). CI (`.github/workflows/frontend-ci.ym
 - **`ROADMAP.md` is the work queue.** Pick items from it; keep it current as work lands.
 - **Every roadmap item gets an ADR** created from [docs/adr/TEMPLATE.md](docs/adr/TEMPLATE.md) *before* implementation. Conventions in [docs/adr/README.md](docs/adr/README.md).
 - Decisions or actions only the owner can take go into the **"⏸ Awaiting user"** queue at the top of `ROADMAP.md` — append a row and move on; don't block or guess.
-- Do not `git commit`/push as part of routine doc or code generation unless the task explicitly says so.
+- **Promote (owner action):** open a PR from `dev` into `prod` and merge it with a
+  merge commit — the merge is the push that starts CD.
+  ```bash
+  gh pr create -B prod -H dev -t "Promote dev → prod" -b "<what ships>"
+  gh pr merge <n> --merge --match-head-commit <reviewed-sha>
+  ```
+  Never squash or rebase a promote PR (that forks `prod` from `dev`).
+  `--match-head-commit` refuses the merge if a routine merged more into `dev` after
+  you reviewed. Agents open or merge a promote PR only when the owner asks in that
+  session; routines never do.
 
 ## NEVER
 
 - **Never change personal, bio, or factual content** (roles, dates, companies, links, claims in `lib/data.ts` or `app/layout.tsx` metadata) without explicit owner confirmation.
-- **Never push to any branch that auto-deploys** to production.
+- **Never push or merge to `prod` unless the owner asks in this session** — it auto-deploys.
 - **Never add paid services** (SaaS subscriptions, paid APIs, new billable AWS resources) without owner approval.

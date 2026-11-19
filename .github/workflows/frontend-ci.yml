@@ -41,3 +41,8 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      # CloudFront Function unit tests; run after the build so they also check
+      # the edge's Markdown twins/404 body against out/.
+      - name: Edge function tests
+        run: pnpm test:edge
