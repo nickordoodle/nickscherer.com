@@ -8,7 +8,8 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 
 | Date | Item | What's needed |
 |---|---|---|
-| 2026-07-18 | Infra bootstrap (see [OPERATIONS.md](OPERATIONS.md) prerequisites): the site cannot deploy until done | Owner creates state bucket `nickscherer-terraform-state`, ensures the `nickscherer.com` Route53 hosted zone exists with registrar NS delegation, runs `terraform apply -var-file=envs/prod.tfvars`, then sets repo secrets `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `S3_BUCKET_NAME`, `CLOUDFRONT_DISTRIBUTION_ID` |
+| 2026-11-18 | **Agent-ready site (item 12, [ADR-0003](docs/adr/0003-agent-ready-site.md)) needs a promote, then a terraform apply** — in that order | 1) After the PR merges to `dev`, promote dev → prod (CD uploads `llms.txt`, `index.md`, `robots.txt`, `sitemap.xml`, OG image…). 2) Then `cd infrastructure/terraform && AWS_PROFILE=aviai terraform apply -var-file=envs/prod.tfvars` (plan: 1 add, 2 change, 0 destroy). 3) Re-scan on is-agentic.com. |
+| 2026-11-18 | **No privacy page** — is-agentic's trust-anchors check wants `/about`, `/contact`, `/privacy` (≥500 chars each). Agents never draft legal text. | Owner decides: supply privacy-policy text (and, optionally, an email/contact detail for a `/contact` page) or accept the partial trust-anchors score. |
 | 2026-07-18 | Hero CTAs link to `/resume.pdf` but `public/` contains no such file — the View/Download Resume buttons 404 on the live site | Owner provides a resume PDF to place at `public/resume.pdf` (or decides to remove the CTAs) |
 
 ## Status Grid
@@ -18,8 +19,8 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 | # | Item | Priority | Status |
 |---|------|----------|--------|
 | 1 | [Scaffold repo from nickordoodle.com](#scaffold-repo-from-nickordoodlecom) | High | ✅ Done 2026-07-18 ([ADR-0001](docs/adr/0001-scaffold-from-nickordoodle.md)) |
-| 2 | [Provision AWS infrastructure & first deploy](#provision-aws-infrastructure--first-deploy) | High | ⏸️ Awaiting user (see queue above) |
-| 3 | [Fill SEO gaps: robots.txt, sitemap, favicon, OG image](#fill-seo-gaps-robotstxt-sitemap-favicon-og-image) | High | 🔴 Not started |
+| 2 | [Provision AWS infrastructure & first deploy](#provision-aws-infrastructure--first-deploy) | High | ✅ Done 2026-07-18 (verified 2026-11-18) |
+| 3 | [Fill SEO gaps: robots.txt, sitemap, favicon, OG image](#fill-seo-gaps-robotstxt-sitemap-favicon-og-image) | High | 🟡 Folded into item 12 ([ADR-0003](docs/adr/0003-agent-ready-site.md)); code in PR |
 | 4 | [Audit echarts bundle size](#audit-echarts-bundle-size) | Medium | 🔴 Not started |
 | 5 | [Replace placeholder avatar and media gallery](#replace-placeholder-avatar-and-media-gallery) | Medium | 🔴 Not started (needs owner assets) |
 | 6 | [Accessibility and reduced-motion pass](#accessibility-and-reduced-motion-pass) | Medium | 🔴 Not started |
@@ -28,6 +29,7 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 | 9 | [Upgrade Next.js to 15/16 (major)](#upgrade-nextjs-to-1516-major) | Medium | 🔴 Not started |
 | 10 | [Manage drift against nickordoodle.com](#manage-drift-against-nickordoodlecom) | Low | 🔴 Ongoing concern |
 | 11 | [Flatten repo to a single package](#flatten-repo-to-a-single-package) | High | ✅ Done 2026-07-18 ([ADR-0002](docs/adr/0002-flatten-to-single-package.md)) |
+| 12 | [Make the site agent-ready (llms.txt, Markdown negotiation, real 404s)](#make-the-site-agent-ready-llmstxt-markdown-negotiation-real-404s) | High | 🟡 Code in PR (owner-requested 2026-11-18); live after promote + terraform apply ([ADR-0003](docs/adr/0003-agent-ready-site.md)) |
 
 ## High priority
 
@@ -39,17 +41,23 @@ Copied the nickordoodle.com tree and transformed it: package scope → `@nicksch
 
 ### Provision AWS infrastructure & first deploy
 
-Status: ⏸️ Awaiting user
+Status: ✅ Done 2026-07-18 (verified read-only 2026-11-18: distribution `E1E2E0OP6RW1BA` serves nickscherer.com + www from `nickscherer-frontend-prod-594391086764`, all four repo secrets exist, CD run 29661076451 green; the ⏸ bootstrap row was cleared)
 
 All four bootstrap prerequisites in [OPERATIONS.md](OPERATIONS.md) are owner actions (state bucket, hosted zone + delegation, `terraform apply`, repo secrets). Once done: push `prod` and verify the CD run and the live site.
 
 ### Fill SEO gaps: robots.txt, sitemap, favicon, OG image
 
-Status: Not started (inherited gap from the source repo)
+Status: 🟡 Folded into item 12 ([ADR-0003](docs/adr/0003-agent-ready-site.md)) — robots, sitemap, favicon, OG image, `metadataBase`/canonical and JSON-LD all ship there, mirroring nickordoodle.com's ADR-0003.
 
 `app/layout.tsx` has solid metadata (title, description, OpenGraph, Twitter card), but `public/` contains only `images/avatar-placeholder.svg` — no `robots.txt`, no sitemap, no favicon, and the `summary_large_image` Twitter card has no actual image. `metadataBase` is unset and there is no JSON-LD Person structured data — especially relevant for a resume site.
 
 Plan: add `robots.txt` and a sitemap (static file or `app/sitemap.ts`), favicon set, a real OG image, `metadataBase`, and JSON-LD in the layout.
+
+### Make the site agent-ready (llms.txt, Markdown negotiation, real 404s)
+
+Status: 🟡 Code in PR; live after promote + terraform apply ([ADR-0003](docs/adr/0003-agent-ready-site.md)). Owner-requested 2026-11-18.
+
+is-agentic.com scored the site 55/100: soft 404s (CloudFront serves `/index.html` with 200 for every unknown path, so `robots.txt`, `sitemap.xml` and `llms.txt` all "existed" as HTML), no Markdown negotiation, no JSON-LD, no canonical or `og:image`. Shipped (mirrors nickordoodle.com ADR-0003 + ADR-0005): SEO basics, Person JSON-LD, build-time `llms.txt` / `llms-full.txt` / `index.md` / `404.md` from `lib/data.ts`, CloudFront Functions for `Accept: text/markdown` + `Vary: Accept`, real 404s via `/404.html`, `node --test` coverage in CI, and no-cache sync for `.txt`/`.xml`/`.md`. Remaining gaps: trust-anchor pages (privacy text is owner-only) and brand search (off-site).
 
 ## Medium priority
 

@@ -22,9 +22,10 @@ pnpm dev         # next dev
 pnpm build       # fetch-medium.mjs + next build → out/
 pnpm lint        # next lint
 pnpm typecheck   # tsc --noEmit
+pnpm test:edge   # node --test for the CloudFront Functions (ADR-0003)
 ```
 
-There is no test script yet (see ROADMAP). CI (`.github/workflows/frontend-ci.yml`) runs lint, typecheck, and build on push/PR to `dev` and `prod`. Note `pnpm build` requires network access to fetch the Medium RSS feed — on failure it writes an empty `lib/medium-posts.json` rather than failing the build.
+There is no frontend test suite yet (see ROADMAP); `pnpm test:edge` covers the CloudFront Functions in `infrastructure/terraform/modules/frontend-cdn/functions/`. CI (`.github/workflows/frontend-ci.yml`) runs lint, typecheck, build and `test:edge` on push/PR to `dev` and `prod`. Agent-facing text (`llms.txt`, `index.md`, …) is generated from `lib/data.ts` by `lib/agent-content.ts`; About/contact prose that lives in components is mirrored there — keep both in sync. Note `pnpm build` requires network access to fetch the Medium RSS feed — on failure it writes an empty `lib/medium-posts.json` rather than failing the build.
 
 ## Code conventions (observed)
 

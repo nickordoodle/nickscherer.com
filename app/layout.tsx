@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Providers } from './providers';
+import { PERSON_JSON_LD, SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE, SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Nick Scherer — VP Engineering & Agentic AI Builder',
-  description:
-    'Professional resume of Nick Scherer — VP of Engineering at Rostrum Pacific / SpaceHeater. Agentic AI, music tech, AWS, full-stack product development, and Army veteran.',
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   keywords: [
     'Nick Scherer',
     'VP Engineering',
@@ -18,18 +19,17 @@ export const metadata: Metadata = {
     'Army Veteran',
   ],
   authors: [{ name: 'Nick Scherer' }],
+  alternates: { canonical: '/' },
   openGraph: {
-    title: 'Nick Scherer — VP Engineering & Agentic AI Builder',
-    description:
-      'Building at the intersection of Agentic AI, Big Data, and Music Technology.',
+    title: SITE_TITLE,
+    description: SITE_TAGLINE,
     type: 'website',
-    url: 'https://nickscherer.com',
+    url: SITE_URL,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Nick Scherer — VP Engineering & Agentic AI Builder',
-    description:
-      'Building at the intersection of Agentic AI, Big Data, and Music Technology.',
+    title: SITE_TITLE,
+    description: SITE_TAGLINE,
   },
 };
 
@@ -49,6 +49,11 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <script
+          type="application/ld+json"
+          // Static, build-time constant — no user input reaches this.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_JSON_LD) }}
+        />
         <Providers>{children}</Providers>
       </body>
     </html>
