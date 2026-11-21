@@ -51,6 +51,12 @@ There is no frontend test suite yet (see ROADMAP); `pnpm test:edge` covers the C
   `--match-head-commit` refuses the merge if a routine merged more into `dev` after
   you reviewed. Agents open or merge a promote PR only when the owner asks in that
   session; routines never do.
+- **Record all work (owner rule).** Every session, scheduled routine or interactive, records what it did, in the same PR as the change or a follow-up docs PR to `dev`:
+  - **WORKLOG.md:** append one dated entry, newest first, in the file's format, using real UTC timestamps from `date -u` (never estimated). Covers code changes, merges, promotes and deploys, prod or infra actions, investigations with findings, and owner decisions. Say what was verified and what wasn't.
+  - **ROADMAP.md:** keep the item's row current. Status (not started / in progress / shipped) plus a short note of what shipped, where (branch, PR, promote commit), the ADR link and what is still waiting on the owner. New work gets a row and an ADR before it is built, per the ADR rule above. Pick ROADMAP and ADR numbers from `dev` right before merging, because concurrent sessions take numbers too.
+  - **Ops ledger (OPERATIONS.md "Pending prod actions", plus the ROADMAP "Awaiting user" queue):** add, update or clear the row for anything the owner must do in prod (terraform applies, credentials, DNS, deploy watches), and mark it done once verified.
+  - **Deploys:** after a promote/deploy, record the promote commit, which deploys ran and their results, terraform applies and post-deploy checks (site health, CloudFront), in both WORKLOG and ROADMAP.
+  - A change isn't done until these records are merged.
 
 ## NEVER
 
