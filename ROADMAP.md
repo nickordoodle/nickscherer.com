@@ -26,10 +26,10 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 | 6 | [Accessibility and reduced-motion pass](#accessibility-and-reduced-motion-pass) | Medium | 🔴 Not started |
 | 7 | [Introduce a test setup](#introduce-a-test-setup) | Low | 🔴 Not started |
 | 8 | [Harden the Medium feed build step](#harden-the-medium-feed-build-step) | Low | 🔴 Not started |
-| 9 | [Upgrade Next.js to 15/16 (major)](#upgrade-nextjs-to-1516-major) | Medium | 🟡 Next 15.5.29 on `dev` via #8 (2026-11-21, not promoted); React 19 / eslint-config-next not done |
+| 9 | [Upgrade Next.js to 15/16 (major)](#upgrade-nextjs-to-1516-major) | Medium | 🟡 Next 15.5.29 shipped to prod 2026-11-21 (#8 → promote #10, 61e49a3, CD green); React 19 / eslint-config-next not done |
 | 10 | [Manage drift against nickordoodle.com](#manage-drift-against-nickordoodlecom) | Low | 🔴 Ongoing concern |
 | 11 | [Flatten repo to a single package](#flatten-repo-to-a-single-package) | High | ✅ Done 2026-07-18 ([ADR-0002](docs/adr/0002-flatten-to-single-package.md)) |
-| 12 | [Make the site agent-ready (llms.txt, Markdown negotiation, real 404s)](#make-the-site-agent-ready-llmstxt-markdown-negotiation-real-404s) | High | 🟡 Promoted 2026-11-19 (#6 → #7); `terraform apply` still pending; llms.txt / Markdown / real 404s observed live 2026-11-20 ([ADR-0003](docs/adr/0003-agent-ready-site.md)) |
+| 12 | [Make the site agent-ready (llms.txt, Markdown negotiation, real 404s)](#make-the-site-agent-ready-llmstxt-markdown-negotiation-real-404s) | High | 🟡 Promoted 2026-11-19 (#6 → #7); `terraform apply` still pending; llms.txt / Markdown / real 404s observed live 2026-11-20 and again by curl 2026-11-21 22:48 UTC, so the apply may already be done, owner to confirm ([ADR-0003](docs/adr/0003-agent-ready-site.md)) |
 
 ## High priority
 
@@ -87,7 +87,7 @@ Plan: honor `prefers-reduced-motion` in `ParticleCanvas`, `CursorSpotlight`, `Sc
 
 ### Upgrade Next.js to 15/16 (major)
 
-Status: 🟡 Partly shipped: Dependabot #8 bumped next to 15.5.29 on `dev` 2026-11-21 (CI green, not promoted; supersedes closed #4). Still open: React 19, `eslint-config-next` (still 14.2.35), peer-compat check of echarts-for-react/framer-motion, visual verification, then promote.
+Status: 🟡 Partly shipped: Dependabot #8 bumped next to 15.5.29 2026-11-21 (CI green; promoted via #10, 61e49a3, CD green; supersedes closed #4). Still open: React 19, `eslint-config-next` (still 14.2.35), peer-compat check of echarts-for-react/framer-motion, visual verification, then promote.
 
 next is pinned to the 14.x line (14.2.35), two majors behind. 14.x no longer receives security patches for newer advisories; the source repo's ADR-0002 dismissals rest on the static-export architecture. A major upgrade (with React 19) closes them on merit.
 
