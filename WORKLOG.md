@@ -14,6 +14,16 @@ Next: ...
 Blocked / owner: ...
 ```
 
+## 2026-11-21 22:50 UTC — ADR-0003 agent-ready apply confirmed live
+Branch / PR: `docs/adr-0003-apply-verified` → `dev` (docs only)
+ADR: [ADR-0003](docs/adr/0003-agent-ready-site.md)
+Changed:
+- Answered the open question from the previous entry: a read-only `AWS_PROFILE=aviai terraform plan -var-file=envs/prod.tfvars` from `infrastructure/terraform/` on a checkout of `prod` (61e49a3) reports **No changes**, so the ADR-0003 edge apply had already been run before today.
+- OPERATIONS.md: the ADR-0003 "Pending prod actions" row is marked ✅ Done with that evidence.
+Gates: plan run by the owner's portfolio session (no apply needed, none run). Curl checks from the previous entry still hold. Not verified: who ran the apply or when (no record found).
+Next: nothing; the docs ride the next promote.
+Blocked / owner: none.
+
 ## 2026-11-21 22:46 UTC — Record-all-work rule; log of 2026-11-21 dependency merges
 Branch / PR: `docs/record-all-work` → `dev` (docs only)
 ADR: none (process/docs change)
