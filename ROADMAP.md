@@ -30,6 +30,7 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 | 10 | [Manage drift against nickordoodle.com](#manage-drift-against-nickordoodlecom) | Low | 🔴 Ongoing concern |
 | 11 | [Flatten repo to a single package](#flatten-repo-to-a-single-package) | High | ✅ Done 2026-07-18 ([ADR-0002](docs/adr/0002-flatten-to-single-package.md)) |
 | 12 | [Make the site agent-ready (llms.txt, Markdown negotiation, real 404s)](#make-the-site-agent-ready-llmstxt-markdown-negotiation-real-404s) | High | 🟡 Promoted 2026-11-19 (#6 → #7); `terraform apply` still pending; llms.txt / Markdown / real 404s observed live 2026-11-20 and again by curl 2026-11-21 22:48 UTC, so the apply may already be done, owner to confirm ([ADR-0003](docs/adr/0003-agent-ready-site.md)) |
+| 13 | CI on pull requests into `dev` only (owner rule 2026-11-25) | Low | ✅ Done 2026-11-25 ([ADR-0004](docs/adr/0004-pr-only-ci.md)) — Frontend CI: non-draft PRs into `dev`, path-filtered, no push runs; CD unchanged |
 
 ## High priority
 

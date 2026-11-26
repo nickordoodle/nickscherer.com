@@ -72,7 +72,7 @@ In order — nothing downstream works until each is done:
 4. **Create the four repo secrets:** `AWS_ACCESS_KEY_ID`,
    `AWS_SECRET_ACCESS_KEY`, plus `S3_BUCKET_NAME` and
    `CLOUDFRONT_DISTRIBUTION_ID` from the Terraform outputs.
-5. Optional: branch protection on `prod` (require the CI check).
+5. Optional: branch protection on `prod`. Don't make the CI check required there: CI runs on pull requests into `dev` only, never on promote PRs ([ADR-0004](docs/adr/0004-pr-only-ci.md)).
 
 ## Deploying the site
 
