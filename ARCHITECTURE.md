@@ -51,7 +51,7 @@ Root outputs: `frontend_bucket`, `cloudfront_distribution_id` (for cache invalid
 
 ## CI/CD
 
-- `.github/workflows/frontend-ci.yml` — lint/typecheck/build gate on push/PR to `dev` and `prod`.
+- `.github/workflows/frontend-ci.yml` — lint/typecheck/build/`test:edge` gate on non-draft pull requests into `dev` only, path-filtered ([ADR-0004](docs/adr/0004-pr-only-ci.md)).
 - `.github/workflows/frontend-cd-prod.yml` — deploys on push to `prod` (build → `s3 sync` → CloudFront invalidation; see [OPERATIONS.md](OPERATIONS.md)). Non-functional until the AWS secrets exist.
 
 ## Build / deploy / serve flow

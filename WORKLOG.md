@@ -14,6 +14,16 @@ Next: ...
 Blocked / owner: ...
 ```
 
+## 2026-11-26 03:24 UTC — CI on pull requests into dev only (owner CI rule)
+Branch / PR: `ci/pr-only-ci` → PR to `dev` (squash-merged if green; see git log)
+ADR: [ADR-0004](docs/adr/0004-pr-only-ci.md)
+Changed:
+- Frontend CI runs only on non-draft PRs into `dev`, path-filtered; no push runs, promote PRs run nothing. Public repo, so this is for consistency with the sibling sites, not cost.
+- CD unchanged. AGENTS.md gains the no-op-run rule; OPERATIONS no longer suggests requiring the CI check on `prod`.
+Gates: workflow YAML parsed, actionlint clean; no site code changed, so the PR's own Frontend CI run is the self-test.
+Next: nothing for CI.
+Blocked / owner: none.
+
 ## 2026-11-21 22:50 UTC — ADR-0003 agent-ready apply confirmed live
 Branch / PR: `docs/adr-0003-apply-verified` → `dev` (docs only)
 ADR: [ADR-0003](docs/adr/0003-agent-ready-site.md)

@@ -1,18 +1,39 @@
+# Pull requests into dev only: a push (dev merge, prod promote) runs no CI and
+# promote PRs (dev → prod) are not CI'd. Docs-only PRs run nothing. The repo is
+# public (free minutes); this matches the portfolio's owner CI rule of
+# 2026-11-25 for consistency (ADR-0004).
 name: Frontend CI
 
 on:
-  push:
-    branches: [dev, prod]
   pull_request:
-    branches: [dev, prod]
+    branches: [dev]
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'public/**'
+      - 'scripts/**'
+      - 'infrastructure/terraform/modules/frontend-cdn/functions/**'
+      - 'next.config.js'
+      - 'next-env.d.ts'
+      - 'tailwind.config.js'
+      - 'postcss.config.js'
+      - 'tsconfig.json'
+      - '.eslintrc.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/frontend-ci.yml'
+  workflow_dispatch:
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   ci:
     name: Lint, Typecheck, Build
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
 
     steps:

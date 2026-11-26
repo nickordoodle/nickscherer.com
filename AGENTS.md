@@ -25,7 +25,7 @@ pnpm typecheck   # tsc --noEmit
 pnpm test:edge   # node --test for the CloudFront Functions (ADR-0003)
 ```
 
-There is no frontend test suite yet (see ROADMAP); `pnpm test:edge` covers the CloudFront Functions in `infrastructure/terraform/modules/frontend-cdn/functions/`. CI (`.github/workflows/frontend-ci.yml`) runs lint, typecheck, build and `test:edge` on push/PR to `dev` and `prod`. Agent-facing text (`llms.txt`, `index.md`, …) is generated from `lib/data.ts` by `lib/agent-content.ts`; About/contact prose that lives in components is mirrored there — keep both in sync. Note `pnpm build` requires network access to fetch the Medium RSS feed — on failure it writes an empty `lib/medium-posts.json` rather than failing the build.
+There is no frontend test suite yet (see ROADMAP); `pnpm test:edge` covers the CloudFront Functions in `infrastructure/terraform/modules/frontend-cdn/functions/`. CI (`.github/workflows/frontend-ci.yml`) runs lint, typecheck, build and `test:edge` on non-draft pull requests into `dev` only (path-filtered); nothing runs on a push and a promote PR runs no CI ([ADR-0004](docs/adr/0004-pr-only-ci.md)). Agent-facing text (`llms.txt`, `index.md`, …) is generated from `lib/data.ts` by `lib/agent-content.ts`; About/contact prose that lives in components is mirrored there — keep both in sync. Note `pnpm build` requires network access to fetch the Medium RSS feed — on failure it writes an empty `lib/medium-posts.json` rather than failing the build.
 
 ## Code conventions (observed)
 
@@ -57,6 +57,7 @@ There is no frontend test suite yet (see ROADMAP); `pnpm test:edge` covers the C
   - **Ops ledger (OPERATIONS.md "Pending prod actions", plus the ROADMAP "Awaiting user" queue):** add, update or clear the row for anything the owner must do in prod (terraform applies, credentials, DNS, deploy watches), and mark it done once verified.
   - **Deploys:** after a promote/deploy, record the promote commit, which deploys ran and their results, terraform applies and post-deploy checks (site health, CloudFront), in both WORKLOG and ROADMAP.
   - A change isn't done until these records are merged.
+  - **No-op runs record nothing.** A run or session that changes nothing (no code, content, test, config or doc change beyond a log entry — nothing qualified, nothing safe, or blocked) commits, pushes and opens nothing: no WORKLOG-only or ROADMAP-only PRs. It ends with its report only.
 
 ## NEVER
 
