@@ -8,7 +8,7 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 
 | Date | Item | What's needed |
 |---|---|---|
-| 2026-11-18 | **Agent-ready site (item 12, [ADR-0003](docs/adr/0003-agent-ready-site.md)) needs a promote, then a terraform apply** — in that order | 1) After the PR merges to `dev`, promote dev → prod (CD uploads `llms.txt`, `index.md`, `robots.txt`, `sitemap.xml`, OG image…). 2) Then `cd infrastructure/terraform && AWS_PROFILE=aviai terraform apply -var-file=envs/prod.tfvars` (plan: 1 add, 2 change, 0 destroy). 3) Re-scan on is-agentic.com. |
+| 2026-11-18 | **Agent-ready site (item 12, [ADR-0003](docs/adr/0003-agent-ready-site.md)) needs a promote, then a terraform apply** — in that order | 1) ~~Promote dev → prod~~ done 2026-11-19 (PR #7, a2dd355). 2) Then `cd infrastructure/terraform && AWS_PROFILE=aviai terraform apply -var-file=envs/prod.tfvars` (plan: 1 add, 2 change, 0 destroy). 3) Re-scan on is-agentic.com. |
 | 2026-11-18 | **No privacy page** — is-agentic's trust-anchors check wants `/about`, `/contact`, `/privacy` (≥500 chars each). Agents never draft legal text. | Owner decides: supply privacy-policy text (and, optionally, an email/contact detail for a `/contact` page) or accept the partial trust-anchors score. |
 | 2026-07-18 | Hero CTAs link to `/resume.pdf` but `public/` contains no such file — the View/Download Resume buttons 404 on the live site | Owner provides a resume PDF to place at `public/resume.pdf` (or decides to remove the CTAs) |
 
@@ -26,10 +26,11 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 | 6 | [Accessibility and reduced-motion pass](#accessibility-and-reduced-motion-pass) | Medium | 🔴 Not started |
 | 7 | [Introduce a test setup](#introduce-a-test-setup) | Low | 🔴 Not started |
 | 8 | [Harden the Medium feed build step](#harden-the-medium-feed-build-step) | Low | 🔴 Not started |
-| 9 | [Upgrade Next.js to 15/16 (major)](#upgrade-nextjs-to-1516-major) | Medium | 🔴 Not started |
+| 9 | [Upgrade Next.js to 15/16 (major)](#upgrade-nextjs-to-1516-major) | Medium | 🟡 Next 15.5.29 shipped to prod 2026-11-21 (#8 → promote #10, 61e49a3, CD green); React 19 / eslint-config-next not done |
 | 10 | [Manage drift against nickordoodle.com](#manage-drift-against-nickordoodlecom) | Low | 🔴 Ongoing concern |
 | 11 | [Flatten repo to a single package](#flatten-repo-to-a-single-package) | High | ✅ Done 2026-07-18 ([ADR-0002](docs/adr/0002-flatten-to-single-package.md)) |
-| 12 | [Make the site agent-ready (llms.txt, Markdown negotiation, real 404s)](#make-the-site-agent-ready-llmstxt-markdown-negotiation-real-404s) | High | 🟡 Code in PR (owner-requested 2026-11-18); live after promote + terraform apply ([ADR-0003](docs/adr/0003-agent-ready-site.md)) |
+| 12 | [Make the site agent-ready (llms.txt, Markdown negotiation, real 404s)](#make-the-site-agent-ready-llmstxt-markdown-negotiation-real-404s) | High | 🟡 Promoted 2026-11-19 (#6 → #7); `terraform apply` still pending; llms.txt / Markdown / real 404s observed live 2026-11-20 and again by curl 2026-11-21 22:48 UTC, so the apply may already be done, owner to confirm ([ADR-0003](docs/adr/0003-agent-ready-site.md)) |
+| 13 | CI on pull requests into `dev` only (owner rule 2026-11-25) | Low | ✅ Done 2026-11-25 ([ADR-0004](docs/adr/0004-pr-only-ci.md)) — Frontend CI: non-draft PRs into `dev`, path-filtered, no push runs; CD unchanged |
 
 ## High priority
 
@@ -87,7 +88,7 @@ Plan: honor `prefers-reduced-motion` in `ParticleCanvas`, `CursorSpotlight`, `Sc
 
 ### Upgrade Next.js to 15/16 (major)
 
-Status: Not started (inherited from source repo's item 10)
+Status: 🟡 Partly shipped: Dependabot #8 bumped next to 15.5.29 2026-11-21 (CI green; promoted via #10, 61e49a3, CD green; supersedes closed #4). Still open: React 19, `eslint-config-next` (still 14.2.35), peer-compat check of echarts-for-react/framer-motion, visual verification, then promote.
 
 next is pinned to the 14.x line (14.2.35), two majors behind. 14.x no longer receives security patches for newer advisories; the source repo's ADR-0002 dismissals rest on the static-export architecture. A major upgrade (with React 19) closes them on merit.
 
