@@ -8,7 +8,7 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 
 | Date | Item | What's needed |
 |---|---|---|
-| 2026-11-18 | **Agent-ready site (item 12, [ADR-0003](docs/adr/0003-agent-ready-site.md)) needs a promote, then a terraform apply** — in that order | 1) ~~Promote dev → prod~~ done 2026-11-19 (PR #7, a2dd355). 2) Then `cd infrastructure/terraform && AWS_PROFILE=aviai terraform apply -var-file=envs/prod.tfvars` (plan: 1 add, 2 change, 0 destroy). 3) Re-scan on is-agentic.com. |
+| 2026-11-18 | **Agent-ready site (item 12, [ADR-0003](docs/adr/0003-agent-ready-site.md)) needs a promote, then a terraform apply** — in that order | 1) ~~Promote dev → prod~~ done 2026-11-19 (PR #7, a2dd355). 2) ~~`terraform apply`~~ done (confirmed 2026-11-21: read-only plan on `prod` reports "No changes"). 3) Re-scan on is-agentic.com, still open. |
 | 2026-11-18 | **No privacy page** — is-agentic's trust-anchors check wants `/about`, `/contact`, `/privacy` (≥500 chars each). Agents never draft legal text. | Owner decides: supply privacy-policy text (and, optionally, an email/contact detail for a `/contact` page) or accept the partial trust-anchors score. |
 | 2026-07-18 | Hero CTAs link to `/resume.pdf` but `public/` contains no such file — the View/Download Resume buttons 404 on the live site | Owner provides a resume PDF to place at `public/resume.pdf` (or decides to remove the CTAs) |
 
@@ -29,8 +29,8 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 | 9 | [Upgrade Next.js to 15/16 (major)](#upgrade-nextjs-to-1516-major) | Medium | 🟡 Next 15.5.29 shipped to prod 2026-11-21 (#8 → promote #10, 61e49a3, CD green); React 19 / eslint-config-next not done |
 | 10 | [Manage drift against nickordoodle.com](#manage-drift-against-nickordoodlecom) | Low | 🔴 Ongoing concern |
 | 11 | [Flatten repo to a single package](#flatten-repo-to-a-single-package) | High | ✅ Done 2026-07-18 ([ADR-0002](docs/adr/0002-flatten-to-single-package.md)) |
-| 12 | [Make the site agent-ready (llms.txt, Markdown negotiation, real 404s)](#make-the-site-agent-ready-llmstxt-markdown-negotiation-real-404s) | High | 🟡 Promoted 2026-11-19 (#6 → #7); `terraform apply` still pending; llms.txt / Markdown / real 404s observed live 2026-11-20 and again by curl 2026-11-21 22:48 UTC, so the apply may already be done, owner to confirm ([ADR-0003](docs/adr/0003-agent-ready-site.md)) |
-| 13 | CI on pull requests into `dev` only (owner rule 2026-11-25) | Low | ✅ Done 2026-11-25 ([ADR-0004](docs/adr/0004-pr-only-ci.md)) — Frontend CI: non-draft PRs into `dev`, path-filtered, no push runs; CD unchanged |
+| 12 | [Make the site agent-ready (llms.txt, Markdown negotiation, real 404s)](#make-the-site-agent-ready-llmstxt-markdown-negotiation-real-404s) | High | ✅ Live: promoted 2026-11-19 (#6 → #7); the edge apply was confirmed done 2026-11-21 (read-only plan "No changes"; llms.txt / Markdown / real 404s pass by curl) ([ADR-0003](docs/adr/0003-agent-ready-site.md)); is-agentic re-scan ⏸ |
+| 13 | CI on pull requests into `dev` only (owner rule 2026-11-25) | Low | ✅ Done 2026-11-25 ([ADR-0004](docs/adr/0004-pr-only-ci.md)) — Frontend CI: non-draft PRs into `dev`, path-filtered, no push runs; CD unchanged. In `prod` via promote PR #13 (6957670, 2026-11-26; docs/workflow only, so no CD run) |
 
 ## High priority
 
@@ -56,7 +56,7 @@ Plan: add `robots.txt` and a sitemap (static file or `app/sitemap.ts`), favicon 
 
 ### Make the site agent-ready (llms.txt, Markdown negotiation, real 404s)
 
-Status: 🟡 Code in PR; live after promote + terraform apply ([ADR-0003](docs/adr/0003-agent-ready-site.md)). Owner-requested 2026-11-18.
+Status: ✅ Live (promoted 2026-11-19; edge apply confirmed done 2026-11-21) ([ADR-0003](docs/adr/0003-agent-ready-site.md)). Owner-requested 2026-11-18.
 
 is-agentic.com scored the site 55/100: soft 404s (CloudFront serves `/index.html` with 200 for every unknown path, so `robots.txt`, `sitemap.xml` and `llms.txt` all "existed" as HTML), no Markdown negotiation, no JSON-LD, no canonical or `og:image`. Shipped (mirrors nickordoodle.com ADR-0003 + ADR-0005): SEO basics, Person JSON-LD, build-time `llms.txt` / `llms-full.txt` / `index.md` / `404.md` from `lib/data.ts`, CloudFront Functions for `Accept: text/markdown` + `Vary: Accept`, real 404s via `/404.html`, `node --test` coverage in CI, and no-cache sync for `.txt`/`.xml`/`.md`. Remaining gaps: trust-anchor pages (privacy text is owner-only) and brand search (off-site).
 
