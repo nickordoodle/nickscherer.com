@@ -14,6 +14,17 @@ Next: ...
 Blocked / owner: ...
 ```
 
+## 2026-11-26 04:54 UTC — Record promote #13 (prod 6957670; no CD run)
+Branch / PR: `docs/promote-record-2026-11-26` → PR to `dev` (squash), docs only. Promote PR #13 merged `dev` into `prod` (merge commit 6957670, 2026-11-26 ~04:25 UTC, by the owner's portfolio PM session). Previous `prod`: 61e49a3 (#10).
+ADR: [ADR-0004](docs/adr/0004-pr-only-ci.md), [ADR-0003](docs/adr/0003-agent-ready-site.md) (records only)
+Changed:
+- Range: #9 (record-all-work rule + WORKLOG), #11 (ADR-0003 apply confirmed live, ops row cleared) and #12 (CI on pull requests into `dev` only, ADR-0004). Docs and workflow files only, outside the CD path filter, so "Frontend CD" did not run and the live site is unchanged.
+- Pre-checks (PM session): every squash-merged PR in range passed PR CI (or needed none). No CI ran on the promote push. No terraform apply.
+- ROADMAP caught up with #11: item 12 and its ⏸ row still said the ADR-0003 apply was pending, but OPERATIONS and the 2026-11-21 22:50 entry already recorded it as done (plan "No changes"). Item 12 is now ✅; only the is-agentic re-scan stays with the owner.
+Gates: docs only. All 13 portfolio prod health URLs returned 200 afterwards (PM session).
+Next: nothing.
+Blocked / owner: is-agentic re-scan (item 12), privacy page, resume PDF; unchanged.
+
 ## 2026-11-26 03:24 UTC — CI on pull requests into dev only (owner CI rule)
 Branch / PR: `ci/pr-only-ci` → PR to `dev` (squash-merged if green; see git log)
 ADR: [ADR-0004](docs/adr/0004-pr-only-ci.md)
