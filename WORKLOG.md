@@ -14,6 +14,16 @@ Next: ...
 Blocked / owner: ...
 ```
 
+## 2026-11-28 05:19 UTC — Shared agent team + FOCUS.md (item 14)
+Branch / PR: `chore/agent-team` → PR to `dev` (squash), docs and `.claude/` only
+ADR: [ADR-0005](docs/adr/0005-agent-team-and-focus.md)
+Changed:
+- Committed the shared planner/verifier/reviewer subagents (`.claude/agents/`) and the team playbook (`.claude/rules/team.md`), synced byte-identical from `~/.claude/team`; `.gitignore` now un-ignores `.claude/agents` and `.claude/rules`.
+- Added FOCUS.md (imported from CLAUDE.md after `@AGENTS.md`), seeded from ROADMAP, WORKLOG and AGENTS.md. Now: 1) resume PDF + privacy page (owner file/text); 2) port nickordoodle.com's echarts and a11y fixes (#4, #6); 3) Medium feed hardening + tests (#8, #7). AGENTS.md points to both.
+Gates: docs only, no build or test run. Verified: synced files match canonical. Not verified: nothing else applies.
+Next: owner reviews FOCUS.md.
+Blocked / owner: FOCUS.md review; resume PDF and privacy text unchanged.
+
 ## 2026-11-26 04:54 UTC — Record promote #13 (prod 6957670; no CD run)
 Branch / PR: `docs/promote-record-2026-11-26` → PR to `dev` (squash), docs only. Promote PR #13 merged `dev` into `prod` (merge commit 6957670, 2026-11-26 ~04:25 UTC, by the owner's portfolio PM session). Previous `prod`: 61e49a3 (#10).
 ADR: [ADR-0004](docs/adr/0004-pr-only-ci.md), [ADR-0003](docs/adr/0003-agent-ready-site.md) (records only)

@@ -31,6 +31,7 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 | 11 | [Flatten repo to a single package](#flatten-repo-to-a-single-package) | High | ✅ Done 2026-07-18 ([ADR-0002](docs/adr/0002-flatten-to-single-package.md)) |
 | 12 | [Make the site agent-ready (llms.txt, Markdown negotiation, real 404s)](#make-the-site-agent-ready-llmstxt-markdown-negotiation-real-404s) | High | ✅ Live: promoted 2026-11-19 (#6 → #7); the edge apply was confirmed done 2026-11-21 (read-only plan "No changes"; llms.txt / Markdown / real 404s pass by curl) ([ADR-0003](docs/adr/0003-agent-ready-site.md)); is-agentic re-scan ⏸ |
 | 13 | CI on pull requests into `dev` only (owner rule 2026-11-25) | Low | ✅ Done 2026-11-25 ([ADR-0004](docs/adr/0004-pr-only-ci.md)) — Frontend CI: non-draft PRs into `dev`, path-filtered, no push runs; CD unchanged. In `prod` via promote PR #13 (6957670, 2026-11-26; docs/workflow only, so no CD run) |
+| 14 | Shared agent team + FOCUS.md steering file (owner request 2026-11-27) | Medium | ✅ Done 2026-11-27 ([ADR-0005](docs/adr/0005-agent-team-and-focus.md)) — planner/verifier/reviewer subagents + team playbook synced from `~/.claude/team`; FOCUS.md seeded for owner review. Docs/`.claude` only, no deploy impact |
 
 ## High priority
 

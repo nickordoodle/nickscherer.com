@@ -1,4 +1,5 @@
 @AGENTS.md
+@FOCUS.md
 
 Orientation for any task in this repo: ROADMAP.md is the work queue (with the
 "⏸ Awaiting user" section for blocked items); ARCHITECTURE.md is the
