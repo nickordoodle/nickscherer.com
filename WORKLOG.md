@@ -14,6 +14,15 @@ Next: ...
 Blocked / owner: ...
 ```
 
+## 2026-11-28 06:32 UTC — Team sync: roadmap is the work source
+Branch / PR: `chore/roadmap-first` → PR to `dev` (squash), docs and `.claude/` only
+ADR: none (sync-only)
+Changed:
+- Team sync: ROADMAP.md is the work source (in order); FOCUS.md steers the planner, which ranks ROADMAP items. FOCUS header + AGENTS pointer reworded. No ADR (sync-only).
+Gates: none run (docs and `.claude/` config only). Diff checked against `origin/dev`.
+Next: none.
+Blocked / owner: none.
+
 ## 2026-11-28 05:41 UTC — FOCUS.md rewritten high level + team sync
 Branch / PR: `chore/focus-high-level` → PR to `dev` (squash), docs and `.claude/` only
 ADR: none (docs only)

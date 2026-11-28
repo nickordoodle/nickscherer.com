@@ -16,10 +16,17 @@ the work is the *builder*.
 | **ROADMAP.md** | The queue: specific items and their status, "⏸ Awaiting user" owner decisions, "🗳 Proposed additions" | Builders and the planner, following AGENTS.md | Every time work is picked, finished or blocked |
 | **WORKLOG.md** | What was actually done: one entry per session that changed anything, newest first, with PR/commit/ADR links, gate results, "Next" and blockers | Every session that changes anything | Every such session |
 
-Don't copy between them: an item belongs in ROADMAP, not FOCUS, and a result belongs in WORKLOG,
-not ROADMAP prose. When choosing or proposing work, prefer FOCUS's top areas. Never start work in
-a "Not now" area. Follow its "Balance" and "Quality bar". An explicit request from the owner in a
-chat outranks FOCUS.md for that task.
+**How they connect: FOCUS.md → planner → ROADMAP.md → builders → WORKLOG.md.** FOCUS.md
+steers the `planner`, which turns its areas into specific, ranked items in ROADMAP.md. Builders
+take their work from ROADMAP.md in its order; they don't reorder it by their own reading of
+FOCUS.md. When something conflicts, ROADMAP order wins for picking work. Flag a ROADMAP item
+that clashes with FOCUS (for example, one in a "Not now" area) to the owner instead of skipping
+it silently. Builders still follow FOCUS's "Balance" and "Quality bar", and never draft new work
+in a "Not now" area. An explicit request from the owner in a chat outranks all of this for that
+task.
+
+Don't copy between the files: an item belongs in ROADMAP, not FOCUS, and a result belongs in
+WORKLOG, not ROADMAP prose.
 
 **Every session uses WORKLOG.md:**
 - **Start:** read its top ~5 entries. They are the ground truth for what recently happened (a
@@ -49,8 +56,13 @@ any change you'll commit or merge; the owner can tell you to skip steps.
    update the ROADMAP. That edit is a real doc change: it ships in this session's PR, or alone if
    nothing else qualifies (the only allowed ROADMAP-only PR, at most once a week). In a chat, run
    the planner only when the owner asks what's next.
-2. **Choose:** the owner's request, or the routine/AGENTS.md precedence, informed by WORKLOG's
-   recent entries. Between candidates, FOCUS.md's areas decide.
+2. **Choose from ROADMAP.md** (or take the owner's request), in this order:
+   - in-flight work: an open PR, or WORKLOG's last "Next" line;
+   - the top approved ROADMAP item, in ROADMAP order;
+   - the top-ranked "🗳 Proposed additions" item you can self-approve (the planner ranked these by
+     FOCUS.md);
+   - upkeep.
+   Use FOCUS.md only to break a tie, or to shape a proposal you draft yourself when none exist.
 3. **Build with tests.** Tests are part of the change, not a follow-up:
    - Every behavior change gets a unit or integration test that fails without it. Every bug fix
      gets a regression test.
