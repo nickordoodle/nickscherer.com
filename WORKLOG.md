@@ -14,6 +14,17 @@ Next: ...
 Blocked / owner: ...
 ```
 
+## 2026-11-28 05:41 UTC — FOCUS.md rewritten high level + team sync
+Branch / PR: `chore/focus-high-level` → PR to `dev` (squash), docs and `.claude/` only
+ADR: none (docs only)
+Changed:
+- FOCUS.md rewritten high level (what the repo is + focus areas; items stay in ROADMAP, history in WORKLOG). Focus areas: the resume and trust basics work; keeping pace with nickordoodle.com; reliable content and tests; current and healthy.
+- Moved from the old FOCUS: a new ROADMAP "🗳 Proposed additions" section (Dependabot update jobs failing; nsapplied.com back-port list), port notes on grid items 4, 6 and 8, and an AGENTS.md "Owner calls" rule (this repo had no never-self-approve list). AGENTS.md's FOCUS pointer now says "ranked focus areas".
+- Team playbook synced from `~/.claude/team` (three files, three jobs; every session reads/writes WORKLOG).
+Gates: none run (docs and `.claude/` config only). Diff checked against `origin/dev`.
+Next: owner reviews FOCUS.md and the two 🗳 rows.
+Blocked / owner: none.
+
 ## 2026-11-28 05:34 UTC — Team sync: single reviewer, tests + e2e
 Branch / PR: `chore/team-sync-2` → PR to `dev` (squash), `.claude/` only
 ADR: none (sync-only)

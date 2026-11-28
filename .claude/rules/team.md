@@ -8,9 +8,26 @@ This applies to **every session in this repo**: a local Claude Code chat (CLI, d
 IDE), a cloud session on claude.ai/code, and a scheduled routine run. Whichever session is doing
 the work is the *builder*.
 
-**FOCUS.md is the owner's steering file.** When choosing, proposing or sizing work, prefer its
-"Now" themes, then "Next". Never start "Not now" items. Follow its "Balance" and "Quality bar".
-An explicit request from the owner in a chat outranks FOCUS.md for that task.
+## Three files, three jobs
+
+| File | Job | Who writes it | Changes |
+|---|---|---|---|
+| **FOCUS.md** | What this repo is, its north star, and the ranked focus areas to build on. High level, with no item numbers or statuses | The owner (agents suggest edits) | When direction changes |
+| **ROADMAP.md** | The queue: specific items and their status, "⏸ Awaiting user" owner decisions, "🗳 Proposed additions" | Builders and the planner, following AGENTS.md | Every time work is picked, finished or blocked |
+| **WORKLOG.md** | What was actually done: one entry per session that changed anything, newest first, with PR/commit/ADR links, gate results, "Next" and blockers | Every session that changes anything | Every such session |
+
+Don't copy between them: an item belongs in ROADMAP, not FOCUS, and a result belongs in WORKLOG,
+not ROADMAP prose. When choosing or proposing work, prefer FOCUS's top areas. Never start work in
+a "Not now" area. Follow its "Balance" and "Quality bar". An explicit request from the owner in a
+chat outranks FOCUS.md for that task.
+
+**Every session uses WORKLOG.md:**
+- **Start:** read its top ~5 entries. They are the ground truth for what recently happened (a
+  ROADMAP checkbox can be stale), including the last "Next" and any blockers.
+- **End:** if the session changed anything (code, content, config or docs beyond the log itself),
+  add one entry in the file's format, timestamped with `date -u`, in the same PR as the change.
+  Chats that only answer questions or explore add nothing. Unattended runs that change nothing
+  push nothing.
 
 ## Roles
 
@@ -32,8 +49,8 @@ any change you'll commit or merge; the owner can tell you to skip steps.
    update the ROADMAP. That edit is a real doc change: it ships in this session's PR, or alone if
    nothing else qualifies (the only allowed ROADMAP-only PR, at most once a week). In a chat, run
    the planner only when the owner asks what's next.
-2. **Choose:** the owner's request, or the routine/AGENTS.md precedence. Between candidates,
-   FOCUS.md decides.
+2. **Choose:** the owner's request, or the routine/AGENTS.md precedence, informed by WORKLOG's
+   recent entries. Between candidates, FOCUS.md's areas decide.
 3. **Build with tests.** Tests are part of the change, not a follow-up:
    - Every behavior change gets a unit or integration test that fails without it. Every bug fix
      gets a regression test.
@@ -48,7 +65,8 @@ any change you'll commit or merge; the owner can tell you to skip steps.
    any focus area to weight more heavily (for example, "security: this touches auth"). Fix every
    blocker, including missing tests, and every should-fix you agree with. Re-run `verifier` if
    code changed. Do at most one re-review.
-6. **PR body** gets the verifier's gate table and tests line, and
+6. **Record:** update the item's ROADMAP status and add the WORKLOG entry. The PR body gets the
+   verifier's gate table, its tests line, and
    `Review: <verdict> — N fixed, M declined (<one-line reason each>)`.
 
 Doc-only changes (WORKLOG, ROADMAP, ADR prose, other .md) skip steps 3–5.
@@ -59,7 +77,9 @@ Doc-only changes (WORKLOG, ROADMAP, ADR prose, other .md) skip steps 3–5.
 - "Review this" (a branch, PR or diff): use `reviewer`, plus `verifier` if the branch builds.
 - Big multi-part jobs: if agent teams are enabled in this session, propose the feature or research
   recipe below. Otherwise fan out subagents in parallel.
-- Changing FOCUS.md is the owner's call. Edit it only when asked; otherwise suggest edits.
+- "What's been done / where are we": answer from WORKLOG.md first, then ROADMAP.md.
+- Changing FOCUS.md is the owner's call. Edit it only when asked; otherwise suggest edits. Keep
+  it at the level of areas. A specific item the owner mentions goes in ROADMAP.md.
 
 ## Agent team recipes (when the owner asks for a team)
 
