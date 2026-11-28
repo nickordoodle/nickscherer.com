@@ -14,6 +14,15 @@ Next: ...
 Blocked / owner: ...
 ```
 
+## 2026-11-28 05:34 UTC — Team sync: single reviewer, tests + e2e
+Branch / PR: `chore/team-sync-2` → PR to `dev` (squash), `.claude/` only
+ADR: none (sync-only)
+Changed:
+- Synced from `~/.claude/team` (no ADR: sync-only): single reviewer with focus areas; tests + Playwright e2e required for behavior/user-facing changes; verifier runs the e2e suite; playbook covers local chats, cloud sessions and routines.
+Gates: none run (docs and `.claude/` config only). Diff checked against `origin/dev`.
+Next: none.
+Blocked / owner: none.
+
 ## 2026-11-28 05:19 UTC — Shared agent team + FOCUS.md (item 14)
 Branch / PR: `chore/agent-team` → PR to `dev` (squash), docs and `.claude/` only
 ADR: [ADR-0005](docs/adr/0005-agent-team-and-focus.md)
