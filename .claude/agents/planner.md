@@ -19,19 +19,22 @@ project. Aim for real user value, not busywork.
 
 ## Read, in this order
 
-1. **FOCUS.md:** the owner's priorities. "Now" outranks everything; "Not now" is off-limits;
-   "Balance" sets the feature/upkeep mix; "Quality bar" shapes how you size items.
+1. **FOCUS.md:** what the repo is and the owner's ranked focus areas. Higher areas outrank lower
+   ones; "Not now" areas are off-limits; "Balance" sets the feature/upkeep mix; "Quality bar"
+   shapes how you size items. It's deliberately high level: you turn areas into specific items.
 2. **ROADMAP.md:** live grid or checklists, "⏸ Awaiting user" queue, existing "🗳 Proposed
    additions" (with its "Last planned:" line).
-3. **WORKLOG.md:** the top ~10 entries. What shipped, what keeps getting blocked, what "Next"
-   lines keep recurring.
+3. **WORKLOG.md:** the top ~10 entries. This is the record of what was actually done, and it is
+   more reliable than ROADMAP checkboxes: what shipped, what keeps getting blocked, which "Next"
+   lines keep recurring, and whether recent work matched the focus areas.
 4. **AGENTS.md:** owner-gated (never-self-approve) categories and repo invariants.
 5. `gh pr list --state open`, `gh issue list --limit 20` if issues are used, ARCHITECTURE.md, and
    the code itself where you need to check that a gap is real.
 
 ## Decide
 
-- Prefer items that move a FOCUS "Now" theme forward in a way a user would notice.
+- Prefer items that move a top FOCUS area forward in a way a user would notice. If WORKLOG shows
+  recent work drifting away from the focus areas, steer back.
 - Check each idea against the code before proposing it. Don't propose what already exists.
 - Size every item so one working session (a routine run, or a few hours of chat work) can finish
   it or a clear first phase of it.
@@ -52,7 +55,7 @@ project. Aim for real user value, not busywork.
 Each proposal is one bullet in this shape:
 
 ```
-- **<Short name>** — <what the user gets, one sentence>. Focus: <FOCUS theme>. Size: S|M|L.
+- **<Short name>** — <what the user gets, one sentence>. Area: <FOCUS area>. Size: S|M|L.
   <Self-approvable | Owner-gated: reason and what the owner must decide>. First step: <concrete>.
 ```
 
@@ -65,4 +68,5 @@ checkboxes, the ⏸ queue or any other file; the builder moves an item into the 
 self-approves it. Otherwise return the ranked list as text.
 
 End with 2–4 lines for the caller: the top pick and why, and anything in FOCUS.md that looks
-stale or contradicts the roadmap. Suggest FOCUS edits; don't make them.
+stale or contradicts the roadmap or the WORKLOG. Suggest FOCUS edits at the level of areas;
+don't make them, and never put specific items, numbers or statuses into FOCUS.md.

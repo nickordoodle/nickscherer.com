@@ -12,6 +12,15 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 | 2026-11-18 | **No privacy page** — is-agentic's trust-anchors check wants `/about`, `/contact`, `/privacy` (≥500 chars each). Agents never draft legal text. | Owner decides: supply privacy-policy text (and, optionally, an email/contact detail for a `/contact` page) or accept the partial trust-anchors score. |
 | 2026-07-18 | Hero CTAs link to `/resume.pdf` but `public/` contains no such file — the View/Download Resume buttons 404 on the live site | Owner provides a resume PDF to place at `public/resume.pdf` (or decides to remove the CTAs) |
 
+## 🗳 Proposed additions (awaiting approval)
+
+> Candidates, **not on the grid** until the owner approves. This repo has no routine and no self-approval; the owner promotes, edits or deletes rows.
+
+| Proposed item | Why | Risk / owner input |
+|---|---|---|
+| Find out why Dependabot update jobs fail every run | Version-update PRs never arrive, so dependency drift goes unnoticed | Low — investigation; a config fix that touches CI is fine, CD changes stay with the owner |
+| Back-port nsapplied.com improvements (table in nsapplied.com's ADR-0007) | nsapplied.com, scaffolded from this repo, has since gained tests, a CD verify gate, convention discovery, a `*.txt`/`*.xml` revalidate cache split, an invalidation wait and Terraform `default_tags` | Tests are agent work; the CD workflow and Terraform items are owner-gated |
+
 ## Status Grid
 
 **Legend:** ✅ Completed · 🟡 In progress · 🔴 Not started · ⏸️ Deferred
@@ -21,11 +30,11 @@ _Architecture overview lives in [ARCHITECTURE.md](ARCHITECTURE.md)._
 | 1 | [Scaffold repo from nickordoodle.com](#scaffold-repo-from-nickordoodlecom) | High | ✅ Done 2026-07-18 ([ADR-0001](docs/adr/0001-scaffold-from-nickordoodle.md)) |
 | 2 | [Provision AWS infrastructure & first deploy](#provision-aws-infrastructure--first-deploy) | High | ✅ Done 2026-07-18 (verified 2026-11-18) |
 | 3 | [Fill SEO gaps: robots.txt, sitemap, favicon, OG image](#fill-seo-gaps-robotstxt-sitemap-favicon-og-image) | High | 🟡 Folded into item 12 ([ADR-0003](docs/adr/0003-agent-ready-site.md)); code in PR |
-| 4 | [Audit echarts bundle size](#audit-echarts-bundle-size) | Medium | 🔴 Not started |
+| 4 | [Audit echarts bundle size](#audit-echarts-bundle-size) | Medium | 🔴 Not started — port nickordoodle.com's shipped fix (its ADR-0004: `echarts/core` tree-shaking) |
 | 5 | [Replace placeholder avatar and media gallery](#replace-placeholder-avatar-and-media-gallery) | Medium | 🔴 Not started (needs owner assets) |
-| 6 | [Accessibility and reduced-motion pass](#accessibility-and-reduced-motion-pass) | Medium | 🔴 Not started |
+| 6 | [Accessibility and reduced-motion pass](#accessibility-and-reduced-motion-pass) | Medium | 🔴 Not started — port nickordoodle.com's reduced-motion + axe pass (its ADR-0006) |
 | 7 | [Introduce a test setup](#introduce-a-test-setup) | Low | 🔴 Not started |
-| 8 | [Harden the Medium feed build step](#harden-the-medium-feed-build-step) | Low | 🔴 Not started |
+| 8 | [Harden the Medium feed build step](#harden-the-medium-feed-build-step) | Low | 🔴 Not started — same gap and fix as nickordoodle.com item 8; share the approach |
 | 9 | [Upgrade Next.js to 15/16 (major)](#upgrade-nextjs-to-1516-major) | Medium | 🟡 Next 15.5.29 shipped to prod 2026-11-21 (#8 → promote #10, 61e49a3, CD green); React 19 / eslint-config-next not done |
 | 10 | [Manage drift against nickordoodle.com](#manage-drift-against-nickordoodlecom) | Low | 🔴 Ongoing concern |
 | 11 | [Flatten repo to a single package](#flatten-repo-to-a-single-package) | High | ✅ Done 2026-07-18 ([ADR-0002](docs/adr/0002-flatten-to-single-package.md)) |

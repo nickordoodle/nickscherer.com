@@ -61,7 +61,8 @@ Cover all of them. Weight more heavily any the caller names. Tag each finding wi
    raw SQL that mocked tests cannot validate (ask for a real-database check).
 5. **Repo invariants and contracts** from AGENTS.md: for example, types come from shared schemas,
    guards wrap sensitive calls, audit logging is in place, and the API contract (OpenAPI) is
-   updated alongside any route change.
+   updated alongside any route change. The change also carries its record: a WORKLOG.md entry and
+   a ROADMAP status update (missing → should-fix).
 6. **Owner-gated lines crossed:** pricing/billing, user-facing messaging, paid services, privacy or
    legal, what a prod push deploys, plus the repo's own never-self-approve list. Flag these as
    blockers; they go to the owner's queue instead of being merged.
