@@ -19,3 +19,4 @@ Decision records for nickscherer.com. Work items originate in [ROADMAP.md](../..
 | [0002](0002-flatten-to-single-package.md) | Flatten repo to a single package | ✅ Done | 2026-07-18 |
 | [0003](0003-agent-ready-site.md) | Make the site agent-ready (SEO basics, llms.txt, Markdown negotiation, real 404s) | 🟡 In progress | 2026-11-18 |
 | [0004](0004-pr-only-ci.md) | CI on pull requests into dev only | ✅ Done | 2026-11-25 |
+| [0005](0005-agent-team-and-focus.md) | Adopt the shared agent team and a FOCUS.md steering file | ✅ Done | 2026-11-27 |

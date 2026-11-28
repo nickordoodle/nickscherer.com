@@ -72,6 +72,8 @@ Thumbs.db
 # AI/IDE tooling (local)
 .claude/*
 !.claude/settings.json
+!.claude/agents
+!.claude/rules
 !.claude/skills
 .cursor/
 .mcp.json
