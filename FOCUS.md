@@ -1,9 +1,10 @@
 # Focus
 
 > What this project is and where it should grow. Owner-steered and high level: it changes when
-> direction changes, not when work ships. Every Claude session here (local chats, cloud sessions,
-> scheduled routines) and the `planner` read it before choosing work.
-> Specific items, status and owner decisions live in ROADMAP.md; what was actually done lives in WORKLOG.md.
+> direction changes, not when work ships. The `planner` turns it into ranked items in ROADMAP.md,
+> and every Claude session (local chats, cloud sessions, scheduled routines) takes its work from
+> ROADMAP.md. Specific items, status and owner decisions live in ROADMAP.md; what was actually done
+> lives in WORKLOG.md.
 > Last reviewed: 2026-11-28
 
 ## What this is
